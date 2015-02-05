@@ -11,6 +11,10 @@ before_install:
   - npm i -g npm@^2.0.0
 
 before_script:
+  - cat package.json
+  - pwd
+  - ls -alF
+  - ls ./node_modules/.bin/
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - "sleep 5"
@@ -19,6 +23,10 @@ before_script:
 after_success:
   - python travis_after_all.py
   - export $(cat .to_export_back)
+  - cat package.json
+  - pwd
+  - ls -alF
+  - ls ./node_modules/.bin/
 after_failure:
   - python travis_after_all.py
   - export $(cat .to_export_back)
@@ -27,27 +35,24 @@ before_deploy:
 after_script:
   - echo leader=$BUILD_LEADER status=$BUILD_AGGREGATE_STATUS
 
-branches:
-  only:
-    - gh-pages
-
 env:
   global:
     # saucelabs
     - secure: DBDZaLrin8wgzadzTt4fsFeDe/rSyHPLjnoD2d6RYPaIFXIkX8SbU81vZ7PMnLPm8iePuYfEguWv4BCAHJ62uY4GEKnKaRX9n66q6Be8WFbPaDaJ4JmdA0RJIj7N0CtXpH3puWfB7zx5/XvR2c4Cp+W7RwApebzifXzrtNXTqDE=
     - secure: XUPNz3Kkw0F+23dpJHZsucWKKe+zNGeg4/gy3+yaj79HZmuxB4X2XuDm1aRfissO7MoJmlUh0YVY6heQj1JeyBoCy8QB2NjDXrrkiHpf2z12jKv8uxoNQm4tY2/XOguD3I2hFPM/XZW/1wTsozpkLQuThr1H5PWDkSzoEg3VDXI=
   matrix:
-  - TEST_CLIENT=node
   - TEST_CLIENT=selenium:firefox
+  - TEST_CLIENT=node
   - TEST_CLIENT="saucelabs:internet explorer:10:Windows 8"
 
 deploy:
   provider: npm
   email: gregor@martynus.net
+  skip_cleanup: true
   api_key:
     secure: Y/jfw3uEHkojHvuV6ZvlJYF21O14V1gDvnBkpg/OgWsoc/t0jJFyGBdRyQks1dX/6o8xpMNkwQCfjN0HUAcrFu+pysTy0GmIlCWToy9ux5FFrHIn86IPn3ohGGa21a8YrsIESTCNiVvvg18/iGVqdcGtF9MFi2kdODA+bvmhM1E=
   on:
-    branch: gh-pages
+    all_branches: true
     repo: gr2m/initials
     condition: "$BUILD_LEADER = YES"
 
