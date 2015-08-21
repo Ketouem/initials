@@ -112,9 +112,9 @@
     var option
 
     // then we return the first option that has the required length
-    while (option = possibleInitials.shift()) {
-      if (option.length >= length) return option
-    }
+    for (var i = 0; i < possibleInitials.length; i++) {
+      if (possibleInitials[i].length >= length) return possibleInitials[i]
+    };
 
     // if that didn't work, we return the last possible option
     return option
@@ -349,7 +349,6 @@
     var parts
     var partsPossibilities
     var options = []
-    var currentParts = []
 
     name = cleanupName(name)
 
@@ -360,7 +359,6 @@
     // split names into parts
     // 'John Doe' => ['Doe', 'John']
     parts = name.split(' ')
-    currentParts = parts
 
     // map parts to all its possible initials
     // 'John' => ['J', 'Jo', 'Joh', 'John']
